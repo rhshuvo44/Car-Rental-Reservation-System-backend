@@ -1,13 +1,15 @@
 import { model, Schema } from "mongoose";
-import { TUser } from "./car.interface";
+import { TCar } from "./car.interface";
 
-const UserSchema = new Schema<TUser>({
+const CarSchema = new Schema<TCar>({
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    role: { type: String, required: true, enum: ['user', 'admin'] },
-    password: { type: String, required: true },
-    phone: { type: String, required: true },
-    address: { type: String, required: true },
+    description: { type: String },
+    color: { type: String, required: true },
+    isElectric: { type: Boolean, required: true },
+    status: { type: String, enum: ['available', 'unavailable'], default: 'available' },
+    features: { type: [String] },
+    pricePerHour: { type: Number, required: true, min: 0 },
+    isDeleted: { type: Boolean, default: false },
 });
 
-export const User = model<TUser>('User', UserSchema);
+export const Car = model<TCar>('Car', CarSchema);
