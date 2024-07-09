@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-// Define the Zod schema for user validation
 export const UserSchemaZod = z.object({
     name: z.string({
         required_error: "Name is required",
