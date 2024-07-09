@@ -10,6 +10,8 @@ const CarSchema = new Schema<TCar>({
     features: { type: [String] },
     pricePerHour: { type: Number, required: true, min: 0 },
     isDeleted: { type: Boolean, default: false },
+}, {
+    timestamps: true
 });
 
 export const Car = model<TCar>('Car', CarSchema);

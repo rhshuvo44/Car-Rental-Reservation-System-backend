@@ -8,6 +8,8 @@ const BookingSchema = new Schema<TBooking>({
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
     totalCost: { type: Number, default: 0 },
+}, {
+    timestamps: true
 });
 
 export const Booking = model<TBooking>('Booking', BookingSchema);
