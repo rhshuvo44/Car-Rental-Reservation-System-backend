@@ -4,6 +4,9 @@ const app: Application = express();
 
 app.use(express.json());
 app.use(cors());
+// app route
+app.use('/api/products', productRouter);
+app.use('/api/orders', orderRouter);
 
 // root route
 app.get('/', (req: Request, res: Response) => {
