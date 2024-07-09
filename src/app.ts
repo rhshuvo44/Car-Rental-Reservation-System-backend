@@ -1,16 +1,12 @@
 import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
-import { userRouter } from './app/module/user/user.rotes';
-import { carRouter } from './app/module/car/car.rotes';
-import { bookingRouter } from './app/module/booking/booking.rotes';
+import router from './app/route';
 const app: Application = express();
 
 app.use(express.json());
 app.use(cors());
-// app route
-app.use('/api/auth', userRouter);
-app.use('/api/cars', carRouter);
-app.use('/api/bookings', bookingRouter);
+// application routes
+app.use('/api', router);
 
 // root route
 app.get('/', (req: Request, res: Response) => {
