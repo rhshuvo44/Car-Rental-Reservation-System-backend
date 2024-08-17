@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.post('/', carController.createCar);
 router.get('/', carController.getAllCar);
-router.get('/:id',);
+router.get('/:id', carController.getACar);
 router.put('/:id',);
 router.put('/return',);
 router.put('/:id',);//soft deleted from

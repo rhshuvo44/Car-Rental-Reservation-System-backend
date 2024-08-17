@@ -20,9 +20,12 @@ const getAllCar = catchAsync(async (req: Request, res: Response) => {
         data: cars,
     })
 })
+const getACar = catchAsync(async (req: Request, res: Response) => {
+    await carService.getACar(req.params.id,res)
 
+})
 
 
 export const carController = {
-    createCar, getAllCar
+    createCar, getAllCar, getACar
 }
