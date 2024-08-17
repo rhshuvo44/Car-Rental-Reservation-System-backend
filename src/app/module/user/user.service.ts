@@ -49,15 +49,13 @@ const singin = async (userData: TLogin, res: Response) => {
             message: 'Invalid credentials'
         });
     }
-
-
-
+    const userWithPassword = await User.findOne({ email: userData?.email }).select("-password");
 
     res.json({
         success: true,
         statusCode: 200,
         message: 'User logged in successfully',
-        data: user,
+        data: userWithPassword,
         token: ""
     });
 
