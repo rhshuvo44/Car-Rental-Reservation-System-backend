@@ -1,8 +1,8 @@
-import express from 'express';
-const router = express.Router();
+import express from 'express'
+const router = express.Router()
 
-router.post('/',);
-router.get('/',);
-router.get('/my-bookings',);
+router.post('/')
+router.get('/')
+router.get('/my-bookings')
 
-export const bookingRouter = router;
+export const bookingRouter = router

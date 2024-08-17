@@ -1,22 +1,21 @@
-import cors from 'cors';
-import express, { Application, Request, Response } from 'express';
-import router from './app/route';
-import cookieParser from 'cookie-parser';
-import notFound from './app/middlewares/notFound';
-const app: Application = express();
+import cors from 'cors'
+import express, { Application, Request, Response } from 'express'
+import router from './app/route'
+import cookieParser from 'cookie-parser'
+import notFound from './app/middlewares/notFound'
+const app: Application = express()
 
-app.use(express.json());
-app.use(cookieParser());
-app.use(cors());
-
+app.use(express.json())
+app.use(cookieParser())
+app.use(cors())
 
 // application routes
-app.use('/api', router);
+app.use('/api', router)
 
 // root route
 app.get('/', (req: Request, res: Response) => {
-    res.send('Assignment 3 Car Rental Reservation System Backend Server');
-});
+  res.send('Assignment 3 Car Rental Reservation System Backend Server')
+})
 //Not Found
-app.use(notFound);
-export default app;
+app.use(notFound)
+export default app
