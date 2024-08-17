@@ -3,7 +3,7 @@ import { carController } from './car.controller';
 const router = express.Router();
 
 router.post('/', carController.createCar);
-router.get('/',);
+router.get('/', carController.getAllCar);
 router.get('/:id',);
 router.put('/:id',);
 router.put('/return',);

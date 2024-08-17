@@ -8,7 +8,14 @@ const createCar = async (carData: TCar) => {
 
     return car
 }
+const getAllCar = async () => {
+
+
+    const cars = await Car.find({ isDeleted: false });
+
+    return cars
+}
 
 export const carService = {
-    createCar
+    createCar, getAllCar
 }
