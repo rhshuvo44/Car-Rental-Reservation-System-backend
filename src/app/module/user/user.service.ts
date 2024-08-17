@@ -40,14 +40,14 @@ const singin = async (userData: TLogin, res: Response) => {
     }
 
     // Check the password
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) {
-    //     return res.status(400).json({
-    //         success: false,
-    //         statusCode: 400,
-    //         message: 'Invalid credentials'
-    //     });
-    // }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+        return res.status(400).json({
+            success: false,
+            statusCode: 400,
+            message: 'Invalid credentials'
+        });
+    }
 
 
 
