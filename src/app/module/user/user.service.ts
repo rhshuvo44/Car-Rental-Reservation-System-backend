@@ -1,5 +1,6 @@
+import bcrypt from "bcrypt";
 import { Response } from "express";
-import { TUser } from "./user.interface";
+import { TLogin, TUser } from "./user.interface";
 import { User } from "./user.model";
 
 const singup = async (userData: TUser, res: Response) => {
@@ -24,6 +25,43 @@ const singup = async (userData: TUser, res: Response) => {
         data: user
     });
 }
+const singin = async (userData: TLogin, res: Response) => {
+    const { email, password } = userData;
+
+
+    // Check if the user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+        return res.status(400).json({
+            success: false,
+            statusCode: 400,
+            message: 'Invalid credentials'
+        });
+    }
+
+    // Check the password
+    // const isMatch = await bcrypt.compare(password, user.password);
+    // if (!isMatch) {
+    //     return res.status(400).json({
+    //         success: false,
+    //         statusCode: 400,
+    //         message: 'Invalid credentials'
+    //     });
+    // }
+
+
+
+
+    res.json({
+        success: true,
+        statusCode: 200,
+        message: 'User logged in successfully',
+        data: user,
+        token: ""
+    });
+
+
+}
 export const userService = {
-    singup
+    singup, singin
 }
