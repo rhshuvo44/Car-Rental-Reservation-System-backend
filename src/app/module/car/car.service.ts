@@ -58,9 +58,34 @@ const updateCar = async (req: Request, res: Response) => {
         data: updatedCar,
     });
 }
+
+const deletedCar = async (id: string, res: Response) => {
+
+
+    const car = await Car.findById(id);
+
+    if (!car || car.isDeleted) {
+        return res.status(404).json({
+            success: false,
+            statusCode: 404,
+            message: 'Car not found',
+        });
+    }
+
+    // Soft delete the car
+    car.isDeleted = true;
+    const deletedCar = await car.save();
+
+    res.status(200).json({
+        success: true,
+        statusCode: 200,
+        message: 'Car deleted successfully',
+        data: deletedCar,
+    });
+}
 export const carService = {
     createCar,
     getAllCar,
     getACar,
-    updateCar
+    updateCar, deletedCar
 }

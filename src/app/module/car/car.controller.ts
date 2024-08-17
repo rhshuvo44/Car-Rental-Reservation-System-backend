@@ -26,10 +26,13 @@ const getACar = catchAsync(async (req: Request, res: Response) => {
 const updateCar = catchAsync(async (req: Request, res: Response) => {
     await carService.updateCar(req, res)
 })
+const deletedCar = catchAsync(async (req: Request, res: Response) => {
+    await carService.deletedCar(req.params.id, res)
+})
 
 export const carController = {
     createCar,
     getAllCar,
     getACar,
-    updateCar
+    updateCar, deletedCar
 }
