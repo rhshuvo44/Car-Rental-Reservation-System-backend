@@ -17,12 +17,13 @@ const singup = async (userData: TUser, res: Response) => {
     // Create a new user
     user = await User.create(userData);
 
+    const newUser = await User.findOne({ email: userData?.email }).select("-password");
 
     res.status(201).json({
         success: true,
         statusCode: 201,
         message: 'User registered successfully',
-        data: user
+        data: newUser
     });
 }
 const singin = async (userData: TLogin, res: Response) => {
