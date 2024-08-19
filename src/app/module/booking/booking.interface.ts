@@ -5,6 +5,6 @@ export type TBooking = {
   user: ObjectId
   car: ObjectId
   startTime: string
-  endTime: string
+  endTime?: string
   totalCost: number
 }
