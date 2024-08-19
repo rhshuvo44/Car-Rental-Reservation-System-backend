@@ -34,8 +34,7 @@ const getAllBooking = async (req: Request, res: Response) => {
 const createBooking = async (req: Request, res: Response) => {
 
     const { carId, date, startTime } = req.body;
-    // const userId = req.user._id;
-    const userId = "66c0b8fe6f96e16f0b6ffef3";
+    const userId = req.user._id;
 
     // Validate request body
     if (!carId || !date || !startTime) {
@@ -78,11 +77,29 @@ const createBooking = async (req: Request, res: Response) => {
 
 
 }
+const getMyBookings = async (req: Request, res: Response) => {
+
+    const userId = req.user._id;
+
+    const bookings = await Booking.find({ user: userId })
+        .populate('user')
+        .populate('car')
+        .sort({ date: -1, startTime: -1 }); 
+
+    return res.status(200).json({
+        success: true,
+        statusCode: 200,
+        message: 'My Bookings retrieved successfully',
+        data: bookings,
+    });
+
+
+}
 
 
 
 export const bookingService = {
     getAllBooking,
     createBooking,
-    // getMyBookings
+    getMyBookings
 }
