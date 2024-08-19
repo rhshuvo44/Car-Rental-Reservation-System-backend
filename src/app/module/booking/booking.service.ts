@@ -64,7 +64,9 @@ const createBooking = async (req: Request, res: Response) => {
         startTime,
     });
 
-    const populatedBooking = await Booking.find()
+    const populatedBooking = await Booking.find({
+        car: carId,
+    })
         .populate('user')
         .populate('car')
     return res.status(200).json({
