@@ -6,7 +6,7 @@ router.post('/', carController.createCar)
 router.get('/', carController.getAllCar)
 router.get('/:id', carController.getACar)
 router.put('/:id', carController.updateCar)
-router.put('/return')
 router.delete('/:id', carController.deletedCar) //soft deleted from
+router.put('/return')
 
 export const carRouter = router
