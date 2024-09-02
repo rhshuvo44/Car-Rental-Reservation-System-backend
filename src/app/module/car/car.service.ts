@@ -84,7 +84,7 @@ const deletedCar = async (id: string, res: Response) => {
   })
 }
 const returnCar = async (req: Request, res: Response) => {
-  const { bookingId, endTime } = req.body;
+  const { bookingId, endTime } = req.body
 
   // Validate input
   if (!bookingId || !endTime) {
@@ -92,39 +92,40 @@ const returnCar = async (req: Request, res: Response) => {
       success: false,
       statusCode: 400,
       message: 'bookingId and endTime are required',
-    });
+    })
   }
 
   // Find the booking
   const booking = await Booking.findById(bookingId)
     .populate('user')
-    .populate('car');
+    .populate('car')
 
   if (!booking) {
     return res.status(404).json({
       success: false,
       statusCode: 404,
       message: 'Booking not found',
-    });
+    })
   }
 
   // Calculate the total cost based on startTime, endTime, and pricePerHour
-  const startTime = new Date(`${booking.date}T${booking.startTime}`);
-  const endDateTime = new Date(`${booking.date}T${endTime}`);
-  const hoursUsed = (endDateTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
+  const startTime = new Date(`${booking.date}T${booking.startTime}`)
+  const endDateTime = new Date(`${booking.date}T${endTime}`)
+  const hoursUsed =
+    (endDateTime.getTime() - startTime.getTime()) / (1000 * 60 * 60)
 
-  const totalCost = hoursUsed * booking.car.pricePerHour;
+  const totalCost = hoursUsed * booking.car.pricePerHour
 
   // Update the booking with endTime and totalCost
-  booking.endTime = endTime;
-  booking.totalCost = totalCost;
-  await booking.save();
+  booking.endTime = endTime
+  booking.totalCost = totalCost
+  await booking.save()
 
   // Update the car status to "available"
-  const car = await Car.findById(booking.car._id);
+  const car = await Car.findById(booking.car._id)
   if (car) {
-    car.status = 'available';
-    await car.save();
+    car.status = 'available'
+    await car.save()
   }
 
   // Return the updated booking
@@ -133,7 +134,7 @@ const returnCar = async (req: Request, res: Response) => {
     statusCode: 200,
     message: 'Car returned successfully',
     data: booking,
-  });
+  })
 }
 export const carService = {
   createCar,
@@ -141,5 +142,5 @@ export const carService = {
   getACar,
   updateCar,
   deletedCar,
-  returnCar
+  returnCar,
 }

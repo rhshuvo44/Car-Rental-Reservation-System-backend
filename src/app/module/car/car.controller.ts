@@ -39,5 +39,5 @@ export const carController = {
   getACar,
   updateCar,
   deletedCar,
-  returnCar
+  returnCar,
 }
