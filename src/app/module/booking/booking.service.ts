@@ -1,15 +1,17 @@
-import { Request, Response } from 'express'
+import { Request } from 'express'
+import AppError from '../../errors/AppError'
 import { Booking } from './booking.model'
 
-const getAllBooking = async (req: Request, res: Response) => {
+const getAllBooking = async (req: Request) => {
   const { carId, date } = req.query
 
   if (!carId || !date) {
-    return res.status(400).json({
-      success: false,
-      statusCode: 400,
-      message: 'carId and date are required',
-    })
+    throw new AppError(400, 'carId and date are required')
+    // return res.status(400).json({
+    //   success: false,
+    //   statusCode: 400,
+    //   message: 'carId and date are required',
+    // })
   }
 
   const bookings = await Booking.find({
@@ -18,35 +20,39 @@ const getAllBooking = async (req: Request, res: Response) => {
   })
     .populate('user')
     .populate('car')
-
-  return res.status(200).json({
-    success: true,
-    statusCode: 200,
-    message: 'Bookings retrieved successfully',
-    data: bookings,
-  })
+  return bookings
+  // return res.status(200).json({
+  //   success: true,
+  //   statusCode: 200,
+  //   message: 'Bookings retrieved successfully',
+  //   data: bookings,
+  // })
 }
-const createBooking = async (req: Request, res: Response) => {
+const createBooking = async (req: Request) => {
   const { carId, date, startTime } = req.body
   const userId = req.user._id
 
   // Validate request body
   if (!carId || !date || !startTime) {
-    return res.status(400).json({
-      success: false,
-      statusCode: 400,
-      message: 'carId, date, and startTime are required',
-    })
+    throw new AppError(400, 'carId, date, and startTime are required')
+
+    // return res.status(400).json({
+    //   success: false,
+    //   statusCode: 400,
+    //   message: 'carId, date, and startTime are required',
+    // })
   }
 
   // Check if the car is available (not booked) at the given date and time
   const existingBooking = await Booking.findOne({ car: carId, date, startTime })
   if (existingBooking) {
-    return res.status(409).json({
-      success: false,
-      statusCode: 409,
-      message: 'Car is already booked at the selected time',
-    })
+    throw new AppError(409, 'Car is already booked at the selected time')
+
+    // return res.status(409).json({
+    //   success: false,
+    //   statusCode: 409,
+    //   message: 'Car is already booked at the selected time',
+    // })
   }
 
   // Create a new booking
@@ -62,14 +68,15 @@ const createBooking = async (req: Request, res: Response) => {
   })
     .populate('user')
     .populate('car')
-  return res.status(200).json({
-    success: true,
-    statusCode: 200,
-    message: 'Car booked successfully',
-    data: populatedBooking,
-  })
+  return populatedBooking
+  // return res.status(200).json({
+  //   success: true,
+  //   statusCode: 200,
+  //   message: 'Car booked successfully',
+  //   data: populatedBooking,
+  // })
 }
-const getMyBookings = async (req: Request, res: Response) => {
+const getMyBookings = async (req: Request) => {
   const userId = req.user._id
 
   const bookings = await Booking.find({ user: userId })
@@ -77,12 +84,13 @@ const getMyBookings = async (req: Request, res: Response) => {
     .populate('car')
     .sort({ date: -1, startTime: -1 })
 
-  return res.status(200).json({
-    success: true,
-    statusCode: 200,
-    message: 'My Bookings retrieved successfully',
-    data: bookings,
-  })
+  return bookings
+  // return res.status(200).json({
+  //   success: true,
+  //   statusCode: 200,
+  //   message: 'My Bookings retrieved successfully',
+  //   data: bookings,
+  // })
 }
 
 export const bookingService = {

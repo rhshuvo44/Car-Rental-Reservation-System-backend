@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Request } from 'express'
 import httpStatus from 'http-status'
 import AppError from '../../errors/AppError'
 import { Booking } from '../booking/booking.model'
@@ -91,7 +91,7 @@ const deletedCar = async (id: string) => {
   //   data: deletedCar,
   // })
 }
-const returnCar = async (req: Request, res: Response) => {
+const returnCar = async (req: Request) => {
   const { bookingId, endTime } = req.body
 
   // Validate input

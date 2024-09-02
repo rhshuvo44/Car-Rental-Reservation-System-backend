@@ -73,7 +73,7 @@ const deletedCar = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const returnCar = catchAsync(async (req: Request, res: Response) => {
-  const carReturn = await carService.returnCar(req, res)
+  const carReturn = await carService.returnCar(req)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
