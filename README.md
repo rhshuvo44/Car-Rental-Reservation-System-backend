@@ -6,7 +6,7 @@ Car Rental Reservation System App is a sample project built with Express.js and 
 
 ## Live URL
 
-[Live Demo](http://example.com) (Replace with your actual live URL)
+[Live Demo](http://example.com)
 
 ## Features
 
@@ -29,7 +29,7 @@ Car Rental Reservation System App is a sample project built with Express.js and 
 
 ### Prerequisites
 
-- Node.js (>=14.x.x)
+- Node.js
 - npm or yarn
 
 ### Installation
