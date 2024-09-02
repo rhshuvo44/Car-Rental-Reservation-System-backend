@@ -2,7 +2,8 @@ import { z } from 'zod'
 
 export const BookingSchemaZod = z.object({
   body: z.object({
-    date: z.date(),
+    // date: z.date(),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format. Use YYYY-MM-DD.'),
     user: z.string(),
     car: z.string(),
     startTime: z
