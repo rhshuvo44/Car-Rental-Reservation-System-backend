@@ -7,26 +7,26 @@ import { CarSchemaZod, CarUpdateSchemaZod } from './car.validation'
 const router = express.Router()
 
 router.post(
-    '/',
-    auth(USER_ROLE.admin),
-    (req: Request, res: Response, next: NextFunction) => {
-        req.body = JSON.parse(req.body.data)
-        next()
-    },
-    validateRequest(CarSchemaZod),
-    carController.createCar,
+  '/',
+  auth(USER_ROLE.admin),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data)
+    next()
+  },
+  validateRequest(CarSchemaZod),
+  carController.createCar,
 )
 router.get('/', carController.getAllCar)
 router.get('/:id', carController.getACar)
 router.put(
-    '/:id',
-    auth(USER_ROLE.admin),
-    (req: Request, res: Response, next: NextFunction) => {
-        req.body = JSON.parse(req.body.data)
-        next()
-    },
-    validateRequest(CarUpdateSchemaZod),
-    carController.updateCar,
+  '/:id',
+  auth(USER_ROLE.admin),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data)
+    next()
+  },
+  validateRequest(CarUpdateSchemaZod),
+  carController.updateCar,
 )
 router.delete('/:id', auth(USER_ROLE.admin), carController.deletedCar) //soft deleted from
 router.put('/return', auth(USER_ROLE.admin), carController.returnCar)

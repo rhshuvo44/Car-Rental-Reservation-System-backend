@@ -8,4 +8,3 @@ export type TCar = {
   pricePerHour: number
   isDeleted?: boolean
 }
-

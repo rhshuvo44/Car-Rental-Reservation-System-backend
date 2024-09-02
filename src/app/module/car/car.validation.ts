@@ -22,19 +22,24 @@ export const CarSchemaZod = z.object({
 })
 export const CarUpdateSchemaZod = z.object({
   body: z.object({
-    name: z.string({
-      invalid_type_error: 'Name must be a string',
-    }).optional(),
+    name: z
+      .string({
+        invalid_type_error: 'Name must be a string',
+      })
+      .optional(),
     description: z.string().optional(),
-    color: z.string({
-      invalid_type_error: 'Color must be a string',
-    }).optional(),
+    color: z
+      .string({
+        invalid_type_error: 'Color must be a string',
+      })
+      .optional(),
     isElectric: z.boolean().optional(),
     status: z.enum(['available', 'unavailable']).default('available'),
     features: z.array(z.string()).optional(),
     pricePerHour: z
       .number()
-      .positive('Price per hour must be a positive number').optional(),
+      .positive('Price per hour must be a positive number')
+      .optional(),
     isDeleted: z.boolean().default(false),
   }),
 })

@@ -1,7 +1,9 @@
 import { Request, Response } from 'express'
+import httpStatus from 'http-status'
+import AppError from '../../errors/AppError'
+import { Booking } from '../booking/booking.model'
 import { TCar } from './car.interface'
 import { Car } from './car.model'
-import { Booking } from '../booking/booking.model'
 
 const createCar = async (carData: TCar) => {
   const car = await Car.create(carData)
@@ -11,24 +13,26 @@ const getAllCar = async () => {
   const cars = await Car.find({ isDeleted: false })
   return cars
 }
-const getACar = async (id: string, res: Response) => {
+const getACar = async (id: string) => {
   const car = await Car.findById(id)
 
   if (!car || car.isDeleted) {
-    return res.status(404).json({
-      success: false,
-      statusCode: 404,
-      message: 'Car not found',
-    })
-  }
+    throw new AppError(httpStatus.NOT_FOUND, 'Car not found')
 
-  res.status(200).json({
-    success: true,
-    statusCode: 200,
-    data: car,
-  })
+    // return res.status(404).json({
+    //   success: false,
+    //   statusCode: 404,
+    //   message: 'Car not found',
+    // })
+  }
+  return car
+  // res.status(200).json({
+  //   success: true,
+  //   statusCode: 200,
+  //   data: car,
+  // })
 }
-const updateCar = async (req: Request, res: Response) => {
+const updateCar = async (req: Request) => {
   const { id } = req.params
   const { name, description, color, isElectric, features, pricePerHour } =
     req.body
@@ -36,11 +40,13 @@ const updateCar = async (req: Request, res: Response) => {
   const car = await Car.findById(id)
 
   if (!car || car.isDeleted) {
-    return res.status(404).json({
-      success: false,
-      statusCode: 404,
-      message: 'Car not found',
-    })
+    throw new AppError(httpStatus.NOT_FOUND, 'Car not found')
+
+    // return res.status(404).json({
+    //   success: false,
+    //   statusCode: 404,
+    //   message: 'Car not found',
+    // })
   }
 
   // Update car fields
@@ -52,47 +58,51 @@ const updateCar = async (req: Request, res: Response) => {
   car.pricePerHour = pricePerHour || car.pricePerHour
 
   const updatedCar = await car.save()
+  return updatedCar
 
-  res.status(200).json({
-    success: true,
-    statusCode: 200,
-    message: 'Car updated successfully',
-    data: updatedCar,
-  })
+  // res.status(200).json({
+  //   success: true,
+  //   statusCode: 200,
+  //   message: 'Car updated successfully',
+  //   data: updatedCar,
+  // })
 }
 
-const deletedCar = async (id: string, res: Response) => {
+const deletedCar = async (id: string) => {
   const car = await Car.findById(id)
 
   if (!car || car.isDeleted) {
-    return res.status(404).json({
-      success: false,
-      statusCode: 404,
-      message: 'Car not found',
-    })
+    throw new AppError(httpStatus.NOT_FOUND, 'Car not found')
+    // return res.status(404).json({
+    //   success: false,
+    //   statusCode: 404,
+    //   message: 'Car not found',
+    // })
   }
 
   // Soft delete the car
   car.isDeleted = true
   const deletedCar = await car.save()
-
-  res.status(200).json({
-    success: true,
-    statusCode: 200,
-    message: 'Car deleted successfully',
-    data: deletedCar,
-  })
+  return deletedCar
+  // res.status(200).json({
+  //   success: true,
+  //   statusCode: 200,
+  //   message: 'Car deleted successfully',
+  //   data: deletedCar,
+  // })
 }
 const returnCar = async (req: Request, res: Response) => {
   const { bookingId, endTime } = req.body
 
   // Validate input
   if (!bookingId || !endTime) {
-    return res.status(400).json({
-      success: false,
-      statusCode: 400,
-      message: 'bookingId and endTime are required',
-    })
+    throw new AppError(400, 'bookingId and endTime are required')
+
+    // return res.status(400).json({
+    //   success: false,
+    //   statusCode: 400,
+    //   message: 'bookingId and endTime are required',
+    // })
   }
 
   // Find the booking
@@ -101,11 +111,13 @@ const returnCar = async (req: Request, res: Response) => {
     .populate('car')
 
   if (!booking) {
-    return res.status(404).json({
-      success: false,
-      statusCode: 404,
-      message: 'Booking not found',
-    })
+    throw new AppError(httpStatus.NOT_FOUND, 'Booking not found')
+
+    // return res.status(404).json({
+    //   success: false,
+    //   statusCode: 404,
+    //   message: 'Booking not found',
+    // })
   }
 
   // Calculate the total cost based on startTime, endTime, and pricePerHour
@@ -129,12 +141,13 @@ const returnCar = async (req: Request, res: Response) => {
   }
 
   // Return the updated booking
-  return res.status(200).json({
-    success: true,
-    statusCode: 200,
-    message: 'Car returned successfully',
-    data: booking,
-  })
+  return booking
+  // return res.status(200).json({
+  //   success: true,
+  //   statusCode: 200,
+  //   message: 'Car returned successfully',
+  //   data: booking,
+  // })
 }
 export const carService = {
   createCar,

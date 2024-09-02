@@ -50,7 +50,7 @@ const singin = async (userData: TLogin) => {
   // Check the password
   const isMatch = await bcrypt.compare(password, user.password)
   if (!isMatch) {
-    throw new AppError(httpStatus.FORBIDDEN, 'PPassword does not match')
+    throw new AppError(httpStatus.FORBIDDEN, 'Password does not match')
     // return res.status(400).json({
     //   success: false,
     //   statusCode: 400,
