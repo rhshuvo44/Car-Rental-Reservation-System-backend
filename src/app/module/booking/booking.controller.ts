@@ -10,9 +10,9 @@ const getAllBooking = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Bookings retrieved successfully',
-    data: {
+    data: 
       bookings,
-    },
+    
   })
 })
 const createBooking = catchAsync(async (req: Request, res: Response) => {
@@ -21,9 +21,9 @@ const createBooking = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car booked successfully',
-    data: {
+    data: 
       booked,
-    },
+   
   })
 })
 const getMyBookings = catchAsync(async (req: Request, res: Response) => {
@@ -32,9 +32,9 @@ const getMyBookings = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'My Bookings retrieved successfully',
-    data: {
+    data: 
       myBookings,
-    },
+   
   })
 })
 

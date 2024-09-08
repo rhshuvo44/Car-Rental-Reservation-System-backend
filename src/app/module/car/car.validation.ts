@@ -43,3 +43,14 @@ export const CarUpdateSchemaZod = z.object({
     isDeleted: z.boolean().default(false),
   }),
 })
+
+export const CarReturnSchemaZod = z.object({
+  body: z.object({
+    bookingId: z
+      .string()
+    ,
+    endTime: z
+      .string()
+      .regex(/^([01]\d|2[0-3]):?([0-5]\d)$/, 'Invalid end time format'),
+  }),
+})

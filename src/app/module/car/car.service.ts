@@ -42,11 +42,7 @@ const updateCar = async (req: Request) => {
   if (!car || car.isDeleted) {
     throw new AppError(httpStatus.NOT_FOUND, 'Car not found')
 
-    // return res.status(404).json({
-    //   success: false,
-    //   statusCode: 404,
-    //   message: 'Car not found',
-    // })
+
   }
 
   // Update car fields
@@ -60,12 +56,6 @@ const updateCar = async (req: Request) => {
   const updatedCar = await car.save()
   return updatedCar
 
-  // res.status(200).json({
-  //   success: true,
-  //   statusCode: 200,
-  //   message: 'Car updated successfully',
-  //   data: updatedCar,
-  // })
 }
 
 const deletedCar = async (id: string) => {
@@ -97,27 +87,15 @@ const returnCar = async (req: Request) => {
   // Validate input
   if (!bookingId || !endTime) {
     throw new AppError(400, 'bookingId and endTime are required')
-
-    // return res.status(400).json({
-    //   success: false,
-    //   statusCode: 400,
-    //   message: 'bookingId and endTime are required',
-    // })
   }
 
   // Find the booking
   const booking = await Booking.findById(bookingId)
     .populate('user')
     .populate('car')
-
   if (!booking) {
     throw new AppError(httpStatus.NOT_FOUND, 'Booking not found')
 
-    // return res.status(404).json({
-    //   success: false,
-    //   statusCode: 404,
-    //   message: 'Booking not found',
-    // })
   }
 
   // Calculate the total cost based on startTime, endTime, and pricePerHour
@@ -135,6 +113,7 @@ const returnCar = async (req: Request) => {
 
   // Update the car status to "available"
   const car = await Car.findById(booking.car._id)
+
   if (car) {
     car.status = 'available'
     await car.save()
@@ -142,12 +121,7 @@ const returnCar = async (req: Request) => {
 
   // Return the updated booking
   return booking
-  // return res.status(200).json({
-  //   success: true,
-  //   statusCode: 200,
-  //   message: 'Car returned successfully',
-  //   data: booking,
-  // })
+
 }
 export const carService = {
   createCar,

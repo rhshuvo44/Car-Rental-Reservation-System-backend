@@ -32,9 +32,7 @@ const signin = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User is logged in succesfully!',
-    data: {
-      userWithoutPassword,
-    },
+    data: userWithoutPassword,
     token: accessToken,
   })
 })

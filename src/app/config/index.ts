@@ -8,6 +8,6 @@ export default {
   port: process.env.PORT,
   dbURL: process.env.DB_URL,
   node_env: process.env.NODE_ENV,
-  JWT_SECRET: process.env.JWT_SECRET,
-  JWT_EXPIRATION_TIME: process.env.JWT_EXPIRATION_TIME,
+  JWT_SECRET: process.env.JWT_ACCESS_SECRET,
+  JWT_EXPIRATION_TIME: process.env.JWT_ACCESS_EXPIRES_IN,
 }
