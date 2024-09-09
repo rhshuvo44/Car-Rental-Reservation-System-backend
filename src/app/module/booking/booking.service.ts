@@ -1,18 +1,15 @@
-import { Request } from 'express'
+import { Request, Response } from 'express'
 import httpStatus from 'http-status'
 import AppError from '../../errors/AppError'
 import { Booking } from './booking.model'
+import sendResponse from '../../utils/sendResponse'
 
 const getAllBooking = async (req: Request) => {
   const { carId, date } = req.query
 
   if (!carId || !date) {
     throw new AppError(400, 'carId and date are required')
-    // return res.status(400).json({
-    //   success: false,
-    //   statusCode: 400,
-    //   message: 'carId and date are required',
-    // })
+
   }
 
   const bookings = await Booking.find({
@@ -22,20 +19,20 @@ const getAllBooking = async (req: Request) => {
     .populate('user')
     .populate('car')
   return bookings
-  // return res.status(200).json({
-  //   success: true,
-  //   statusCode: 200,
-  //   message: 'Bookings retrieved successfully',
-  //   data: bookings,
-  // })
+
 }
-const createBooking = async (req: Request) => {
+const createBooking = async (req: Request, res: Response) => {
   const { carId, date, startTime } = req.body
   const userId = req.user.userId
 
   // Validate request body
   if (!carId || !date || !startTime) {
-    throw new AppError(400, 'carId, date, and startTime are required')
+    // throw new AppError(400, 'carId, date, and startTime are required')
+    res.status(400).json({
+      statusCode: 400,
+      success: false,
+      message: 'carId, date, and startTime are required',
+    })
   }
 
   // Check if the car is available (not booked) at the given date and time
@@ -43,7 +40,14 @@ const createBooking = async (req: Request) => {
     car: carId, date, startTime
   })
   if (existingBooking) {
-    throw new AppError(409, 'Car is already booked at the selected time')
+
+    res.status(409).json({
+      statusCode: 409,
+      success: false,
+      message: 'Car is already booked at the selected time',
+    })
+   
+
 
   }
 
@@ -58,15 +62,21 @@ const createBooking = async (req: Request) => {
   const populatedBooking = await Booking.find({
     car: carId,
   })
-    .populate('user')
+    .populate({
+      path: 'user',
+      select: '-password',
+    }
+    )
     .populate('car')
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Car booked successfully',
+    data: populatedBooking,
+  })
+
   return populatedBooking
-  // return res.status(200).json({
-  //   success: true,
-  //   statusCode: 200,
-  //   message: 'Car booked successfully',
-  //   data: populatedBooking,
-  // })
+
 }
 const getMyBookings = async (req: Request) => {
   const userId = req.user.userId
@@ -78,12 +88,7 @@ const getMyBookings = async (req: Request) => {
     throw new AppError(httpStatus.NOT_FOUND, 'booking data not found')
   }
   return bookings
-  // return res.status(200).json({
-  //   success: true,
-  //   statusCode: 200,
-  //   message: 'My Bookings retrieved successfully',
-  //   data: bookings,
-  // })
+
 }
 
 export const bookingService = {

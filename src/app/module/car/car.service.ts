@@ -19,11 +19,7 @@ const getACar = async (id: string) => {
   if (!car || car.isDeleted) {
     throw new AppError(httpStatus.NOT_FOUND, 'Car not found')
 
-    // return res.status(404).json({
-    //   success: false,
-    //   statusCode: 404,
-    //   message: 'Car not found',
-    // })
+    
   }
   return car
   // res.status(200).json({

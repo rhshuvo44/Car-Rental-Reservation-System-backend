@@ -12,11 +12,6 @@ const singup = async (userData: TUser) => {
   if (user) {
     throw new AppError(400, 'User already exists')
 
-    // return res.status(400).json({
-    //   success: false,
-    //   statusCode: 400,
-    //   message: 'User already exists',
-    // })
   }
 
   // Create a new user
@@ -26,12 +21,7 @@ const singup = async (userData: TUser) => {
     '-password',
   )
   return newUser
-  // res.status(201).json({
-  //   success: true,
-  //   statusCode: 201,
-  //   message: 'User registered successfully',
-  //   data: newUser,
-  // })
+  
 }
 const singin = async (userData: TLogin) => {
   const { email, password } = userData
@@ -40,34 +30,20 @@ const singin = async (userData: TLogin) => {
   const user = await User.findOne({ email })
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'Invalid credentials')
-    // return res.status(400).json({
-    //   success: false,
-    //   statusCode: 400,
-    //   message: 'Invalid credentials',
-    // })
+    
   }
 
   // Check the password
   const isMatch = await bcrypt.compare(password, user.password)
   if (!isMatch) {
     throw new AppError(httpStatus.FORBIDDEN, 'Password does not match')
-    // return res.status(400).json({
-    //   success: false,
-    //   statusCode: 400,
-    //   message: 'Invalid credentials',
-    // })
+   
   }
   const userWithoutPassword = await User.findOne({
     email: userData?.email,
   }).select('-password')
 
-  // res.json({
-  //   success: true,
-  //   statusCode: 200,
-  //   message: 'User logged in successfully',
-  //   data: userWithPassword,
-  //   token: '',
-  // })
+  
 
   const jwtPayload = {
     userId: user.id,
