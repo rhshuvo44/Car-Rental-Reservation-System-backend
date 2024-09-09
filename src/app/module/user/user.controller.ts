@@ -11,7 +11,7 @@ const signup = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User registered successfully',
-    data: result
+    data: result,
   })
 })
 
@@ -19,7 +19,6 @@ const signin = catchAsync(async (req: Request, res: Response) => {
   const { userWithoutPassword, accessToken } = await userService.singin(
     req?.body,
   )
-  
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

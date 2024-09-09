@@ -3,7 +3,11 @@ import auth from '../../middlewares/auth'
 import validateRequest from '../../middlewares/validateRequest'
 import { USER_ROLE } from '../user/user.constant'
 import { carController } from './car.controller'
-import { CarReturnSchemaZod, CarSchemaZod, CarUpdateSchemaZod } from './car.validation'
+import {
+  CarReturnSchemaZod,
+  CarSchemaZod,
+  CarUpdateSchemaZod,
+} from './car.validation'
 const router = express.Router()
 
 router.post(
@@ -21,6 +25,11 @@ router.put(
   carController.updateCar,
 )
 router.delete('/:id', auth(USER_ROLE.admin), carController.deletedCar) //soft deleted from
-router.put('/return', auth(USER_ROLE.admin), validateRequest(CarReturnSchemaZod), carController.returnCar)
+router.put(
+  '/return',
+  auth(USER_ROLE.admin),
+  validateRequest(CarReturnSchemaZod),
+  carController.returnCar,
+)
 
 export const carRouter = router

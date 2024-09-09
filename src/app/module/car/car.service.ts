@@ -18,8 +18,6 @@ const getACar = async (id: string) => {
 
   if (!car || car.isDeleted) {
     throw new AppError(httpStatus.NOT_FOUND, 'Car not found')
-
-    
   }
   return car
   // res.status(200).json({
@@ -37,8 +35,6 @@ const updateCar = async (req: Request) => {
 
   if (!car || car.isDeleted) {
     throw new AppError(httpStatus.NOT_FOUND, 'Car not found')
-
-
   }
 
   // Update car fields
@@ -51,7 +47,6 @@ const updateCar = async (req: Request) => {
 
   const updatedCar = await car.save()
   return updatedCar
-
 }
 
 const deletedCar = async (id: string) => {
@@ -59,23 +54,14 @@ const deletedCar = async (id: string) => {
 
   if (!car || car.isDeleted) {
     throw new AppError(httpStatus.NOT_FOUND, 'Car not found')
-    // return res.status(404).json({
-    //   success: false,
-    //   statusCode: 404,
-    //   message: 'Car not found',
-    // })
+    
   }
 
   // Soft delete the car
   car.isDeleted = true
   const deletedCar = await car.save()
   return deletedCar
-  // res.status(200).json({
-  //   success: true,
-  //   statusCode: 200,
-  //   message: 'Car deleted successfully',
-  //   data: deletedCar,
-  // })
+  
 }
 const returnCar = async (req: Request) => {
   const { bookingId, endTime } = req.body
@@ -91,7 +77,6 @@ const returnCar = async (req: Request) => {
     .populate('car')
   if (!booking) {
     throw new AppError(httpStatus.NOT_FOUND, 'Booking not found')
-
   }
 
   // Calculate the total cost based on startTime, endTime, and pricePerHour
@@ -103,11 +88,13 @@ const returnCar = async (req: Request) => {
   const totalCost = hoursUsed * booking.car.pricePerHour
 
   // Update the booking with endTime and totalCost
+
   booking.endTime = endTime
   booking.totalCost = totalCost
   await booking.save()
 
   // Update the car status to "available"
+
   const car = await Car.findById(booking.car._id)
 
   if (car) {
@@ -117,7 +104,6 @@ const returnCar = async (req: Request) => {
 
   // Return the updated booking
   return booking
-
 }
 export const carService = {
   createCar,

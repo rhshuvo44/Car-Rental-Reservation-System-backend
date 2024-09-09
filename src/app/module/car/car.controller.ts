@@ -10,8 +10,7 @@ const createCar = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car created successfully',
-    data:
-      car,
+    data: car,
   })
   // res.status(201).json({
   //   success: true,
@@ -26,8 +25,7 @@ const getAllCar = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Cars retrieved successfully',
-    data:
-      cars,
+    data: cars,
   })
   // res.status(200).json({
   //   success: true,
@@ -42,9 +40,7 @@ const getACar = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'A Car retrieved successfully',
-    data:
-      car,
-
+    data: car,
   })
 })
 const updateCar = catchAsync(async (req: Request, res: Response) => {
@@ -54,9 +50,7 @@ const updateCar = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car updated successfully',
-    data:
-      updatedCar,
-
+    data: updatedCar,
   })
 })
 const deletedCar = catchAsync(async (req: Request, res: Response) => {
@@ -65,21 +59,17 @@ const deletedCar = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car deleted successfully',
-    data:
-      deleteCar,
-
+    data: deleteCar,
   })
 })
 const returnCar = catchAsync(async (req: Request, res: Response) => {
   const carReturn = await carService.returnCar(req)
-  
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car returned successfully',
-    data:
-      carReturn,
-
+    data: carReturn,
   })
 })
 

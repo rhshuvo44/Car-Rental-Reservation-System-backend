@@ -11,7 +11,6 @@ const singup = async (userData: TUser) => {
 
   if (user) {
     throw new AppError(400, 'User already exists')
-
   }
 
   // Create a new user
@@ -21,7 +20,6 @@ const singup = async (userData: TUser) => {
     '-password',
   )
   return newUser
-  
 }
 const singin = async (userData: TLogin) => {
   const { email, password } = userData
@@ -30,20 +28,16 @@ const singin = async (userData: TLogin) => {
   const user = await User.findOne({ email })
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'Invalid credentials')
-    
   }
 
   // Check the password
   const isMatch = await bcrypt.compare(password, user.password)
   if (!isMatch) {
     throw new AppError(httpStatus.FORBIDDEN, 'Password does not match')
-   
   }
   const userWithoutPassword = await User.findOne({
     email: userData?.email,
   }).select('-password')
-
-  
 
   const jwtPayload = {
     userId: user.id,
