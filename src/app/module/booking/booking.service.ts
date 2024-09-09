@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import httpStatus from 'http-status'
 import AppError from '../../errors/AppError'
-import { Booking } from './booking.model'
 import sendResponse from '../../utils/sendResponse'
+import { Booking } from './booking.model'
 
 const getAllBooking = async (req: Request) => {
   const { carId, date } = req.query
@@ -46,7 +46,7 @@ const createBooking = async (req: Request, res: Response) => {
       success: false,
       message: 'Car is already booked at the selected time',
     })
-   
+
 
 
   }
@@ -78,16 +78,31 @@ const createBooking = async (req: Request, res: Response) => {
   return populatedBooking
 
 }
-const getMyBookings = async (req: Request) => {
+const getMyBookings = async (req: Request, res: Response) => {
   const userId = req.user.userId
   const bookings = await Booking.find({ user: userId })
-    .populate('user')
+    .populate({
+      path: 'user',
+      select: '-password',
+    })
     .populate('car')
     .sort({ date: -1, startTime: -1 })
   if (bookings.length == 0) {
-    throw new AppError(httpStatus.NOT_FOUND, 'booking data not found')
+    res.status(httpStatus.NOT_FOUND).json({
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: 'booking data not found',
+    })
+    // throw new AppError(httpStatus.NOT_FOUND, 'booking data not found')
   }
-  return bookings
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'My Bookings retrieved successfully',
+    data: bookings,
+
+  })
+  // return bookings
 
 }
 

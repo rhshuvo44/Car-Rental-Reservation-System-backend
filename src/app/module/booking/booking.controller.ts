@@ -16,19 +16,19 @@ const getAllBooking = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const createBooking = catchAsync(async (req: Request, res: Response) => {
-   await bookingService.createBooking(req,res)
-  
+  await bookingService.createBooking(req, res)
+
 })
 const getMyBookings = catchAsync(async (req: Request, res: Response) => {
-  const myBookings = await bookingService.getMyBookings(req)
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'My Bookings retrieved successfully',
-    data:
-      myBookings,
+  await bookingService.getMyBookings(req, res)
+  // sendResponse(res, {
+  //   statusCode: httpStatus.OK,
+  //   success: true,
+  //   message: 'My Bookings retrieved successfully',
+  //   data:
+  //     myBookings,
 
-  })
+  // })
 })
 
 export const bookingController = {
