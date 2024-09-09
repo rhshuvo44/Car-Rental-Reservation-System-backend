@@ -3,7 +3,7 @@ import { TBooking } from './booking.interface'
 
 const BookingSchema = new Schema<TBooking>(
   {
-    date: { type: Date, required: true },
+    date: { type: String, required: true },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     car: { type: Schema.Types.ObjectId, ref: 'Car', required: true },
     startTime: { type: String, required: true },

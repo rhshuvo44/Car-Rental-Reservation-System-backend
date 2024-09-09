@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongoose'
 
 export type TBooking = {
-  date: Date
+  date: string
   user: ObjectId
   car: ObjectId
   startTime: string

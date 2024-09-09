@@ -1,14 +1,18 @@
 import { Request, Response } from 'express'
 import httpStatus from 'http-status'
-import AppError from '../../errors/AppError'
 import sendResponse from '../../utils/sendResponse'
 import { Booking } from './booking.model'
 
-const getAllBooking = async (req: Request) => {
+const getAllBooking = async (req: Request, res: Response) => {
   const { carId, date } = req.query
 
   if (!carId || !date) {
-    throw new AppError(400, 'carId and date are required')
+    // throw new AppError(400, 'carId and date are required')
+    res.status(400).json({
+      statusCode: 400,
+      success: false,
+      message: 'carId, date are required',
+    })
 
   }
 
@@ -16,9 +20,25 @@ const getAllBooking = async (req: Request) => {
     car: carId,
     date: date as string,
   })
-    .populate('user')
+    .populate({
+      path: 'user',
+      select: '-password',
+    })
     .populate('car')
-  return bookings
+  if (bookings.length == 0) {
+    res.status(httpStatus.NOT_FOUND).json({
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: 'booking data not found',
+    })
+    // throw new AppError(httpStatus.NOT_FOUND, 'booking data not found')
+  }
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Bookings retrieved successfully',
+    data: bookings,
+  })
 
 }
 const createBooking = async (req: Request, res: Response) => {
