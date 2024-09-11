@@ -1,6 +1,7 @@
 import { Request } from 'express'
 import httpStatus from 'http-status'
 import AppError from '../../errors/AppError'
+import { Car } from '../car/car.model'
 import { Booking } from './booking.model'
 
 const getAllBooking = async (req: Request) => {
@@ -60,7 +61,11 @@ const createBooking = async (req: Request) => {
       select: '-password',
     })
     .populate('car')
-
+  const car = await Car.findById(carId)
+  if (car) {
+    car.status = 'unavailable'
+    await car.save()
+  }
   return populatedBooking
 }
 const getMyBookings = async (req: Request) => {
