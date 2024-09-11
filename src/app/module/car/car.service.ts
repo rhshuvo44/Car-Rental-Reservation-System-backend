@@ -1,6 +1,7 @@
 import { Request } from 'express'
 import httpStatus from 'http-status'
 import AppError from '../../errors/AppError'
+import { calculateTotalCost } from '../../utils/calculateTotalCost'
 import { Booking } from '../booking/booking.model'
 import { TCar } from './car.interface'
 import { Car } from './car.model'
@@ -20,11 +21,6 @@ const getACar = async (id: string) => {
     throw new AppError(httpStatus.NOT_FOUND, 'Car not found')
   }
   return car
-  // res.status(200).json({
-  //   success: true,
-  //   statusCode: 200,
-  //   data: car,
-  // })
 }
 const updateCar = async (req: Request) => {
   const { id } = req.params
@@ -54,14 +50,12 @@ const deletedCar = async (id: string) => {
 
   if (!car || car.isDeleted) {
     throw new AppError(httpStatus.NOT_FOUND, 'Car not found')
-    
   }
 
   // Soft delete the car
   car.isDeleted = true
   const deletedCar = await car.save()
   return deletedCar
-  
 }
 const returnCar = async (req: Request) => {
   const { bookingId, endTime } = req.body
@@ -79,28 +73,44 @@ const returnCar = async (req: Request) => {
     throw new AppError(httpStatus.NOT_FOUND, 'Booking not found')
   }
 
-  // Calculate the total cost based on startTime, endTime, and pricePerHour
-  const startTime = new Date(`${booking.date}T${booking.startTime}`)
-  const endDateTime = new Date(`${booking.date}T${endTime}`)
-  const hoursUsed =
-    (endDateTime.getTime() - startTime.getTime()) / (1000 * 60 * 60)
+  // Update the car status to "available"
 
-  const totalCost = hoursUsed * booking.car.pricePerHour
+  // const carId = booking.car._id
+  const carId = booking.car
+
+  const car = await Car.findById(carId)
+  if (car) {
+    car.status = 'available'
+    await car.save()
+  }
+
+  const totalCost = calculateTotalCost(
+    booking.date,
+    booking.startTime,
+    endTime,
+    // car.pricePerHour,
+    car?.pricePerHour ?? 0
+  )
+  // function calculateTotalCost(startTime: string, endTime: string, pricePerHour: number): number {
+  //   const start = new Date(`1970-01-01T${startTime}:00`);
+  //   const end = new Date(`1970-01-01T${endTime}:00`);
+  //   const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+  //   return Math.round(hours * pricePerHour);
+  // }
+
+  // // Calculate the total cost based on startTime, endTime, and pricePerHour
+  // const startTime = new Date(`${booking.date}T${booking.startTime}`)
+  // const endDateTime = new Date(`${booking.date}T${endTime}`)
+  // const hoursUsed =
+  //   (endDateTime.getTime() - startTime.getTime()) / (1000 * 60 * 60)
+
+  // const totalCost = hoursUsed * car.pricePerHour
 
   // Update the booking with endTime and totalCost
 
   booking.endTime = endTime
   booking.totalCost = totalCost
   await booking.save()
-
-  // Update the car status to "available"
-
-  const car = await Car.findById(booking.car._id)
-
-  if (car) {
-    car.status = 'available'
-    await car.save()
-  }
 
   // Return the updated booking
   return booking

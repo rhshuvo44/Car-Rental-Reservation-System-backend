@@ -28,9 +28,7 @@ const getMyBookings = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'My Bookings retrieved successfully',
-    data:
-      myBookings,
-
+    data: myBookings,
   })
 })
 

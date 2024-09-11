@@ -8,7 +8,6 @@ const getAllBooking = async (req: Request) => {
 
   if (!carId || !date) {
     throw new AppError(400, 'carId and date are required')
-
   }
 
   const bookings = await Booking.find({
@@ -21,7 +20,6 @@ const getAllBooking = async (req: Request) => {
     })
     .populate('car')
   if (bookings.length == 0) {
-
     throw new AppError(httpStatus.NOT_FOUND, 'booking data not found')
   }
   return bookings
@@ -34,7 +32,6 @@ const createBooking = async (req: Request) => {
   // Validate request body
   if (!carId || !date || !startTime) {
     throw new AppError(400, 'carId, date, and startTime are required')
-
   }
 
   // Check if the car is available (not booked) at the given date and time
@@ -45,8 +42,6 @@ const createBooking = async (req: Request) => {
   })
   if (existingBooking) {
     throw new AppError(400, 'Car is already booked at the selected time')
-
-
   }
 
   // Create a new booking
@@ -66,7 +61,6 @@ const createBooking = async (req: Request) => {
     })
     .populate('car')
 
-
   return populatedBooking
 }
 const getMyBookings = async (req: Request) => {
@@ -79,7 +73,6 @@ const getMyBookings = async (req: Request) => {
     .populate('car')
     .sort({ date: -1, startTime: -1 })
   if (bookings.length == 0) {
-
     throw new AppError(httpStatus.NOT_FOUND, 'booking data not found')
   }
 
