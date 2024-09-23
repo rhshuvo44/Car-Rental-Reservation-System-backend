@@ -54,16 +54,17 @@ const deletedCar = async (id: string) => {
 
   if (!car || car.isDeleted) {
     throw new AppError(httpStatus.NOT_FOUND, 'Car not found')
-    
+
   }
 
   // Soft delete the car
   car.isDeleted = true
   const deletedCar = await car.save()
   return deletedCar
-  
+
 }
 const returnCar = async (req: Request) => {
+  // const id=req.params.id
   const { bookingId, endTime } = req.body
 
   // Validate input
@@ -72,30 +73,36 @@ const returnCar = async (req: Request) => {
   }
 
   // Find the booking
-  const booking = await Booking.findById(bookingId)
-    .populate('user')
+  const booking = await Booking.findById({ _id: bookingId })
+    .populate({
+      path: 'user',
+      select: '-password',
+    })
     .populate('car')
   if (!booking) {
     throw new AppError(httpStatus.NOT_FOUND, 'Booking not found')
   }
+  const car = await Car.findOne({ _id: booking.car })
+  const pricePerHour = car?.pricePerHour
 
   // Calculate the total cost based on startTime, endTime, and pricePerHour
   const startTime = new Date(`${booking.date}T${booking.startTime}`)
   const endDateTime = new Date(`${booking.date}T${endTime}`)
   const hoursUsed =
     (endDateTime.getTime() - startTime.getTime()) / (1000 * 60 * 60)
+  if (pricePerHour) {
+    const totalCost = hoursUsed * pricePerHour
 
-  const totalCost = hoursUsed * booking.car.pricePerHour
+    // Update the booking with endTime and totalCost
 
-  // Update the booking with endTime and totalCost
+    booking.endTime = endTime
+    booking.totalCost = totalCost
+    await booking.save()
+  }
 
-  booking.endTime = endTime
-  booking.totalCost = totalCost
-  await booking.save()
 
   // Update the car status to "available"
 
-  const car = await Car.findById(booking.car._id)
 
   if (car) {
     car.status = 'available'

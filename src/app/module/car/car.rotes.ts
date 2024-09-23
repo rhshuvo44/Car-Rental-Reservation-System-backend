@@ -6,7 +6,7 @@ import { carController } from './car.controller'
 import {
   CarReturnSchemaZod,
   CarSchemaZod,
-  CarUpdateSchemaZod,
+  CarUpdateSchemaZod
 } from './car.validation'
 const router = express.Router()
 
@@ -26,7 +26,7 @@ router.put(
 )
 router.delete('/:id', auth(USER_ROLE.admin), carController.deletedCar) //soft deleted from
 router.put(
-  '/return',
+  '/return/:id',
   auth(USER_ROLE.admin),
   validateRequest(CarReturnSchemaZod),
   carController.returnCar,

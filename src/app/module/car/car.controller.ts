@@ -27,12 +27,7 @@ const getAllCar = catchAsync(async (req: Request, res: Response) => {
     message: 'Cars retrieved successfully',
     data: cars,
   })
-  // res.status(200).json({
-  //   success: true,
-  //   statusCode: 200,
-  //   message: 'Cars retrieved successfully',
-  //   data: cars,
-  // })
+
 })
 const getACar = catchAsync(async (req: Request, res: Response) => {
   const car = await carService.getACar(req.params.id)
